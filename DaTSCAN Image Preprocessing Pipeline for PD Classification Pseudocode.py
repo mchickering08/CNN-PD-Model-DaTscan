@@ -24,3 +24,17 @@ crop_z_max = 45 #upper index limit for z axis (mid brain end)
 img_size = (224, 224) #final 2d spatial size for EN input
 batch_size = 16 #batch size for training data (subject to change)
 epochs = 20 #max number of training epochs (also subject to change)
+
+#load dicom series
+def load_dicom_series(folder_path):
+    '''
+    Load dicom series from a folder then return 3d volume and voxel spacing.
+    '''
+    #list all file names in the folder
+    file_names = os.listdir(folder_path) #get all file names in this folder
+    #create full paths and filter for .dcm files ONLY
+    dicom_files = [
+        os.path.join(folder_path, f) #join folder path and file name
+        for f in file_names #loop through all files in the folder
+        if f.lower().endswith(".dcm") #keep only files ending with .dcm
+    ]
