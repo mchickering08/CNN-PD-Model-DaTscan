@@ -1,0 +1,5 @@
+datscan_env/
+*.dll
+*.pyd
+__pycache__/
+.vscode/
