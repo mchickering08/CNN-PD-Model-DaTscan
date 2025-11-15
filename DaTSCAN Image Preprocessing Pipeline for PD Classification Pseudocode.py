@@ -1,9 +1,9 @@
 import os #working w/ file paths and directory listings
 import numpy as np #numerical arrays and math operations
 import pandas as pd #reading metadata tables (CSV)
-import pydicom #loading DICOM med imaging files !
-import SimpleITK as sitk #for image resampling and med image processing !!
-import cv2 #OpenCV for resizing images and basic image operations !!
+import pydicom #loading DICOM med imaging files 
+import SimpleITK as sitk #for image resampling and med image processing 
+import cv2 #OpenCV for resizing images and basic image operations 
 
 from sklearn.model_selection import train_test_split #creating train/val/test splits
 
@@ -38,3 +38,14 @@ def load_dicom_series(folder_path):
         for f in file_names #loop through all files in the folder
         if f.lower().endswith(".dcm") #keep only files ending with .dcm
     ]
+    
+    #create a list to hold (InstanceNumber, dataset) pairs
+    slices = [] #will hold typles to sort slices in correct order
+    for f in dicom_files: #loop through each file path
+        ds = pydicom.dcmread(f) #read the DICOM file into a dataset object
+        if hasattr(ds, "InstanceNumber"): #check DICOM hs slice index information
+            slices.append((ds.InstanceNumber, ds)) #store the number and the dataset
+
+    #sort slices by InstanceNumber so they are in correct z-order
+    slices.sort(key=l)
+    #test
